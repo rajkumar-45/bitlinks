@@ -8,7 +8,10 @@ export default async function Page({ params }) {
   const db = client.db("bitlinks");
   const collection = db.collection("url");
 
-  const doc = await collection.findOne({ shorturl });
+  const doc = await collection.findOneAndUpdate(
+    { shorturl },
+    { $inc: { clicks: 1 } }
+  );
 
   if (doc) {
     redirect(doc.url); // 🔁 redirect to original URL

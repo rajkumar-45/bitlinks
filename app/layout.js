@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import SessionWrapper from "./components/SessionWrapper";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -22,10 +24,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-purple-50`}
       >
-        <Navbar/>
-        <div className="pt-20"> {/* Add padding top to account for fixed navbar */}
-            {children}
-        </div>
+        <SessionWrapper>
+          <Navbar/>
+          <div className="pt-20"> {/* Add padding top to account for fixed navbar */}
+              {children}
+          </div>
+        </SessionWrapper>
       </body>
     </html>
   );

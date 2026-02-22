@@ -1,5 +1,8 @@
+"use client"
 import Link from 'next/link';
 import localfont from "next/font/local";
+import { useSession, signOut } from "next-auth/react";
+import { User, LogOut, LayoutDashboard } from "lucide-react";
 
 const poppins = localfont({
   src: "../fonts/Poppins-ExtraBold.ttf",
@@ -8,6 +11,8 @@ const poppins = localfont({
 });
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-8 py-4 bg-purple-900/10 backdrop-blur-md border-b border-white/20 shadow-sm">
       <Link href="/">
@@ -32,11 +37,36 @@ const Navbar = () => {
           <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all group-hover:w-full"></span>
         </Link>
 
-        <Link href="/shorten">
-            <button className="bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold px-5 py-2 rounded-full shadow-lg hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300">
-            Get Started
+        {session ? (
+          <div className="flex gap-4 items-center">
+            <Link href="/dashboard" className="flex items-center gap-1 text-gray-700 font-semibold hover:text-purple-600 transition-colors">
+              <LayoutDashboard className="w-4 h-4" />
+              Dashboard
+            </Link>
+            <div className="flex items-center gap-2 bg-purple-100 px-3 py-1.5 rounded-full border border-purple-200">
+              <User className="w-4 h-4 text-purple-600" />
+              <span className="text-sm font-bold text-purple-700">{session.user.name}</span>
+            </div>
+            <button 
+              onClick={() => signOut()}
+              className="text-gray-600 hover:text-red-600 transition-colors p-2"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5" />
             </button>
-        </Link>
+          </div>
+        ) : (
+          <div className="flex gap-4 items-center">
+            <Link href="/login" className="text-gray-700 font-semibold hover:text-purple-600 transition-colors">
+              Login
+            </Link>
+            <Link href="/register">
+              <button className="bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold px-5 py-2 rounded-full shadow-lg hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300">
+                Get Started
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   );

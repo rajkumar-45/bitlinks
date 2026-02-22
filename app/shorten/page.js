@@ -17,47 +17,61 @@ const Shorten = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
 
-    const generate = () => {
+    const [qrCode, setQrCode] = useState("")
+
+    const generate = async () => {
         if (!url || !shorturl) {
             setError("Please enter both URL and short text!")
             return
         }
+
+        // Basic URL validation
+        try {
+            new URL(url.startsWith('http') ? url : `https://${url}`);
+        } catch (e) {
+            setError("Invalid URL format!")
+            return
+        }
+
+        // Alias validation (alphanumeric and hyphens only)
+        if (!/^[a-zA-Z0-9-]+$/.test(shorturl)) {
+            setError("Short text can only contain letters, numbers, and hyphens!")
+            return
+        }
+
         setError("")
         setLoading(true)
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        const raw = JSON.stringify({
-            url: url,
-            shorturl: shorturl
-        });
-
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow"
-        };
-
-        fetch("/api/generate/", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                setLoading(false)
-                if (result.success) {
-                    setgenerated(`${process.env.NEXT_PUBLIC_HOST}/${shorturl}`)
-                    setOriginalUrl(url)
-                    seturl("")
-                    setshorturl("")
-                    setError("")
-                } else {
-                    setError(result.message)
-                }
+        
+        try {
+            const response = await fetch("/api/generate/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url, shorturl })
             })
-            .catch((error) => {
-                setLoading(false)
-                console.error(error)
-                setError("An error occurred! Please try again.")
-            });
+            const result = await response.json()
+            
+            setLoading(false)
+            if (result.success) {
+                const fullUrl = `${window.location.protocol}//${window.location.host}/${shorturl}`
+                setgenerated(fullUrl)
+                setOriginalUrl(url)
+                
+                // Generate QR Code
+                const QRCode = require('qrcode')
+                const qr = await QRCode.toDataURL(fullUrl)
+                setQrCode(qr)
+
+                seturl("")
+                setshorturl("")
+                setError("")
+            } else {
+                setError(result.message)
+            }
+        } catch (error) {
+            setLoading(false)
+            console.error(error)
+            setError("An error occurred! Please try again.")
+        }
     }
 
     const copyToClipboard = () => {
@@ -85,13 +99,16 @@ const Shorten = () => {
                         onChange={e => seturl(e.target.value)} 
                     />
 
-                    <input 
-                        type="text"
-                        value={shorturl}
-                        className='px-5 py-3 rounded-lg bg-white/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-400 placeholder-gray-500 transition-all font-medium text-gray-700'
-                        placeholder='Enter preferred short text'
-                        onChange={e => setshorturl(e.target.value)} 
-                    />
+                    <div className="flex flex-col gap-1">
+                        <input 
+                            type="text"
+                            value={shorturl}
+                            className='px-5 py-3 rounded-lg bg-white/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-400 placeholder-gray-500 transition-all font-medium text-gray-700'
+                            placeholder='Enter preferred short text'
+                            onChange={e => setshorturl(e.target.value)} 
+                        />
+                        <p className="text-[10px] text-gray-500 ml-1">Example: my-cool-link (Letters, numbers, and hyphens only)</p>
+                    </div>
 
                     {error && <p className="text-red-500 text-sm font-semibold text-center animate-pulse">{error}</p>}
                     
@@ -106,9 +123,8 @@ const Shorten = () => {
 
                 {generated && (
                     <div className='flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500'>
-                        
                         {/* Success & Copy Section */}
-                        <div className='bg-green-50 border border-green-200 p-4 rounded-lg flex flex-col gap-3'>
+                        <div className='bg-green-50/50 backdrop-blur-sm border border-green-200 p-4 rounded-lg flex flex-col gap-3'>
                             <span className='font-bold text-green-800 flex items-center gap-2'>
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                                 Link Ready!
@@ -122,7 +138,15 @@ const Shorten = () => {
                                 </button>
                             </div>
                         </div>
-                        
+
+                        {/* QR Code Section */}
+                        {qrCode && (
+                            <div className="flex flex-col items-center gap-2 p-4 bg-white/50 rounded-lg border border-purple-100">
+                                <p className="text-sm font-bold text-purple-800">Scan QR Code</p>
+                                <img src={qrCode} alt="QR Code" className="w-32 h-32 shadow-sm rounded-lg" />
+                                <a href={qrCode} download={`qr-${shorturl}.png`} className="text-xs text-purple-600 font-bold hover:underline">Download QR</a>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
