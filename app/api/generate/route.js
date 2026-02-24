@@ -1,7 +1,6 @@
-import clientPromise from "../../lib/mongodb";
+import clientPromise from "@/lib/mongodb";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../lib/auth-options";
-
+import { authOptions } from "@/lib/auth-options";
 export async function POST(request) {
     const session = await getServerSession(authOptions);
     const body = await request.json() 

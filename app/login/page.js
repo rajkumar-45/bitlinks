@@ -18,23 +18,27 @@ export default function LoginPage() {
         setError("")
 
         try {
+            console.log("Attempting login for:", email.toLowerCase())
             const res = await signIn("credentials", {
-                email,
+                email: email.toLowerCase(),
                 password,
                 redirect: false
             })
 
             if (res.error) {
+                console.error("Login error:", res.error)
                 setError("Invalid email or password")
             } else {
                 router.push("/dashboard")
                 router.refresh()
             }
         } catch (err) {
+            console.error("Login exception:", err)
             setError("Something went wrong")
         } finally {
             setLoading(false)
         }
+
     }
 
     return (

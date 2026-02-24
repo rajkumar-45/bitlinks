@@ -1,9 +1,10 @@
-import clientPromise from "../../lib/mongodb"
+import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcryptjs"
 
 export async function POST(request) {
     try {
-        const { name, email, password } = await request.json()
+        const { name, email: rawEmail, password } = await request.json()
+        const email = rawEmail.toLowerCase()
 
         if (!name || !email || !password) {
             return Response.json({ success: false, message: "Missing required fields" }, { status: 400 })
