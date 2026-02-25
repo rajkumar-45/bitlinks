@@ -9,7 +9,7 @@ export async function POST(request) {
     const collection = db.collection("url")
 
     // Ensure URL has protocol
-    let { url, shorturl } = body;
+    let { url, shorturl, expiresAt, password } = body;
 
     // Validation
     if (!url || !shorturl) {
@@ -41,7 +41,10 @@ export async function POST(request) {
         shorturl: shorturl,
         userId: session?.user?.id || null,
         clicks: 0,
-        createdAt: new Date()
+        createdAt: new Date(),
+        expiresAt: expiresAt ? new Date(expiresAt) : null,
+        password: password || null,
+        isActive: true
     }
 
     const result = await collection.insertOne(newLink)

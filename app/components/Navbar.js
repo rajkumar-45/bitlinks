@@ -2,7 +2,8 @@
 import Link from 'next/link';
 import localfont from "next/font/local";
 import { useSession, signOut } from "next-auth/react";
-import { User, LogOut, LayoutDashboard } from "lucide-react";
+import { User, LogOut, LayoutDashboard, Moon, Sun, Link as LinkIcon } from "lucide-react";
+import { useTheme } from "./ThemeProvider";
 
 const poppins = localfont({
   src: "../fonts/Poppins-ExtraBold.ttf",
@@ -12,61 +13,71 @@ const poppins = localfont({
 
 const Navbar = () => {
   const { data: session } = useSession();
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-8 py-4 bg-purple-900/10 backdrop-blur-md border-b border-white/20 shadow-sm">
-      <Link href="/">
-        <div className={`text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-900 to-pink-500 hover:scale-105 transition-transform duration-300 cursor-pointer ${poppins.className}`}>
-          Bitlinks
-        </div>
-      </Link>
-      
-      <div className="flex gap-6 items-center">
-        <Link href="/" className="text-gray-700 font-semibold hover:text-purple-600 transition-colors relative group">
-          Home
-          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all group-hover:w-full"></span>
-        </Link>
-
-        <Link href="/shorten" className="text-gray-700 font-semibold hover:text-purple-600 transition-colors relative group">
-          Shorten
-          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all group-hover:w-full"></span>
+    <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+      <div className="max-w-7xl mx-auto glass rounded-2xl px-6 py-3 flex justify-between items-center transition-all duration-300">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="bg-brand-primary p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
+            <LinkIcon className="w-5 h-5 text-white" />
+          </div>
+          <div className={`text-2xl font-black text-gradient ${poppins.className}`}>
+            Bitlinks
+          </div>
         </Link>
         
-        <Link href="/github" className="text-gray-700 font-semibold hover:text-purple-600 transition-colors relative group">
-          GitHub
-          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all group-hover:w-full"></span>
-        </Link>
+        <div className="hidden md:flex gap-8 items-center">
+          <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Home
+          </Link>
+          <Link href="/shorten" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Shorten
+          </Link>
+          <Link href="/github" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            GitHub
+          </Link>
+        </div>
 
-        {session ? (
-          <div className="flex gap-4 items-center">
-            <Link href="/dashboard" className="flex items-center gap-1 text-gray-700 font-semibold hover:text-purple-600 transition-colors">
-              <LayoutDashboard className="w-4 h-4" />
-              Dashboard
-            </Link>
-            <div className="flex items-center gap-2 bg-purple-100 px-3 py-1.5 rounded-full border border-purple-200">
-              <User className="w-4 h-4 text-purple-600" />
-              <span className="text-sm font-bold text-purple-700">{session.user.name}</span>
-            </div>
-            <button 
-              onClick={() => signOut()}
-              className="text-gray-600 hover:text-red-600 transition-colors p-2"
-              title="Logout"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
-          </div>
-        ) : (
-          <div className="flex gap-4 items-center">
-            <Link href="/login" className="text-gray-700 font-semibold hover:text-purple-600 transition-colors">
-              Login
-            </Link>
-            <Link href="/register">
-              <button className="bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold px-5 py-2 rounded-full shadow-lg hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300">
-                Get Started
+        <div className="flex gap-4 items-center">
+          <button 
+            onClick={toggleTheme}
+            className="p-2 rounded-xl text-muted-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+            title="Toggle theme"
+          >
+            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+
+          {session ? (
+            <div className="flex gap-3 items-center ml-2 border-l border-border pl-4">
+              <Link href="/dashboard" className="p-2 rounded-xl text-muted-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Dashboard">
+                <LayoutDashboard className="w-5 h-5" />
+              </Link>
+              <div className="hidden md:flex items-center gap-2 bg-secondary px-3 py-1.5 rounded-xl">
+                <User className="w-4 h-4 text-brand-primary" />
+                <span className="text-sm font-semibold truncate max-w-[100px]">{session.user.name}</span>
+              </div>
+              <button 
+                onClick={() => signOut()}
+                className="p-2 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                title="Logout"
+              >
+                <LogOut className="w-5 h-5" />
               </button>
-            </Link>
-          </div>
-        )}
+            </div>
+          ) : (
+            <div className="flex gap-3 items-center ml-2 border-l border-border pl-4">
+              <Link href="/login" className="text-sm font-semibold hover:text-brand-primary transition-colors">
+                Login
+              </Link>
+              <Link href="/register">
+                <button className="btn-primary py-2 px-5 text-sm">
+                  Get Started
+                </button>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
