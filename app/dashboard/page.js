@@ -194,16 +194,42 @@ export default function Dashboard() {
                    <div className="glass-card p-6 rounded-3xl sticky top-32">
                         <h2 className="text-xl font-bold mb-2">Click Trends</h2>
                         <p className="text-sm text-muted-foreground mb-6">Visual performance overview for the last 7 days.</p>
-                        <AnalyticsChart />
+                        <AnalyticsChart statsData={stats.history} />
                         <div className="mt-8 pt-8 border-t border-border">
-                            <h3 className="font-bold mb-4">Top Referrers</h3>
+                            <h3 className="font-bold mb-4">Top Countries</h3>
                             <div className="space-y-3">
-                                <ReferrerItem label="Direct" value="65%" color="bg-brand-primary" />
-                                <ReferrerItem label="Social Media" value="25%" color="bg-brand-secondary" />
-                                <ReferrerItem label="Other" value="10%" color="bg-brand-accent" />
+                                {stats.countries && stats.countries.length > 0 ? (
+                                    stats.countries.map((c, i) => (
+                                        <ReferrerItem 
+                                            key={i} 
+                                            label={c.label} 
+                                            value={`${Math.round((c.count / stats.totalClicks) * 100) || 0}%`} 
+                                            color={i === 0 ? "bg-brand-primary" : i === 1 ? "bg-brand-secondary" : "bg-brand-accent"} 
+                                        />
+                                    ))
+                                ) : (
+                                    <p className="text-xs text-muted-foreground">No data available yet</p>
+                                )}
                             </div>
                         </div>
-                   </div>
+                        <div className="mt-8 pt-8 border-t border-border">
+                            <h3 className="font-bold mb-4">Device Types</h3>
+                            <div className="space-y-3">
+                                {stats.devices && stats.devices.length > 0 ? (
+                                    stats.devices.map((d, i) => (
+                                        <ReferrerItem 
+                                            key={i} 
+                                            label={d.label} 
+                                            value={`${Math.round((d.count / stats.totalClicks) * 100) || 0}%`} 
+                                            color="bg-slate-400" 
+                                        />
+                                    ))
+                                ) : (
+                                    <p className="text-xs text-muted-foreground">No data available yet</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

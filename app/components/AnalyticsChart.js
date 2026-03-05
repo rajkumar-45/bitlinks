@@ -20,7 +20,7 @@ const data = [
   { name: "Sun", clicks: 85 },
 ];
 
-export default function AnalyticsChart({ statsData = data }) {
+export default function AnalyticsChart({ statsData = [] }) {
   return (
     <div className="w-full h-[300px] mt-4">
       <ResponsiveContainer width="100%" height="100%">

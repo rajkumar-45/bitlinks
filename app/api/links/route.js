@@ -13,13 +13,58 @@ export async function GET(request) {
         const client = await clientPromise
         const db = client.db("bitlinks")
         const collection = db.collection("url")
+        const clicksCollection = db.collection("clicks")
 
         const links = await collection.find({ userId: session.user.id }).sort({ createdAt: -1 }).toArray()
 
-        // Calculate stats
+        // Calculate basic stats
         const totalLinks = links.length;
         const totalClicks = links.reduce((acc, link) => acc + (link.clicks || 0), 0);
         const topLink = links.length > 0 ? [...links].sort((a, b) => (b.clicks || 0) - (a.clicks || 0))[0] : null;
+
+        // Fetch detailed analytics
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        // Click History (Last 7 Days)
+        const historyEntries = await clicksCollection.aggregate([
+            { $match: { userId: session.user.id, timestamp: { $gte: sevenDaysAgo } } },
+            { $group: { 
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$timestamp" } },
+                clicks: { $sum: 1 }
+            }},
+            { $sort: { _id: 1 } }
+        ]).toArray();
+
+        // Format history for Chart.js/Recharts
+        const last7Days = [...Array(7)].map((_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            return d.toISOString().split('T')[0];
+        }).reverse();
+
+        const history = last7Days.map(date => {
+            const entry = historyEntries.find(h => h._id === date);
+            return {
+                name: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
+                date: date,
+                clicks: entry ? entry.clicks : 0
+            };
+        });
+
+        // Country Distribution (Top 5)
+        const countryStats = await clicksCollection.aggregate([
+            { $match: { userId: session.user.id } },
+            { $group: { _id: "$country", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 5 }
+        ]).toArray();
+
+        // Device Distribution
+        const deviceStats = await clicksCollection.aggregate([
+            { $match: { userId: session.user.id } },
+            { $group: { _id: "$device", count: { $sum: 1 } } }
+        ]).toArray();
 
         return Response.json({ 
             success: true, 
@@ -27,7 +72,10 @@ export async function GET(request) {
             stats: {
                 totalLinks,
                 totalClicks,
-                topLink: topLink ? { shorturl: topLink.shorturl, clicks: topLink.clicks } : null
+                topLink: topLink ? { shorturl: topLink.shorturl, clicks: topLink.clicks } : null,
+                history,
+                countries: countryStats.map(c => ({ label: c._id, count: c.count })),
+                devices: deviceStats.map(d => ({ label: d._id, count: d.count }))
             }
         })
     } catch (error) {

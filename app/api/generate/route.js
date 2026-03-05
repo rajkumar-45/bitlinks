@@ -21,7 +21,13 @@ export async function POST(request) {
     }
 
     try {
-        new URL(url.startsWith('http') ? url : `https://${url}`);
+        const destUrl = new URL(url.startsWith('http') ? url : `https://${url}`);
+        
+        // Simple Spam/Malware Blacklist
+        const blacklist = ["malicious.com", "phishing-site.net", "scam-link.org"];
+        if (blacklist.some(domain => destUrl.hostname.includes(domain))) {
+            return Response.json({ success: false, message: "This domain is blacklisted for security reasons" }, { status: 400 })
+        }
     } catch (e) {
         return Response.json({ success: false, message: "Invalid destination URL" }, { status: 400 })
     }
