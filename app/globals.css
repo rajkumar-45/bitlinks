@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply border-gray-200;
-  }
+    * {
+        @apply border-gray-200;
+    }
 
-  body {
-    @apply bg-white text-black;
-  }
+    body {
+        @apply bg-white text-black;
+    }
 }
