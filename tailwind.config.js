@@ -7,8 +7,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-      },
+        border: "hsl(var(--border))"
+      }
     },
   },
   plugins: [],
