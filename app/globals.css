@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --border: 214 32% 91%;
+  * {
+    @apply border-gray-200;
   }
 
-  * {
-    @apply border-border;
+  body {
+    @apply bg-white text-black;
   }
 }
