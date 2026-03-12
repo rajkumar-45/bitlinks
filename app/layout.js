@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import SessionWrapper from "./components/SessionWrapper";
@@ -15,6 +16,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const poppins = localFont({
+  src: "./fonts/Poppins-ExtraBold.ttf",
+  variable: "--font-poppins",
+  weight: "800",
+});
+
 export const metadata = {
   title: "Bitlinks | Your Professional URL Shortener",
   description: "Shorten, track, and manage your links with enterprise-grade features.",
@@ -24,7 +31,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-brand-primary selection:text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased selection:bg-brand-primary selection:text-white`}
       >
         <SessionWrapper>
           <ThemeProvider>

@@ -1,15 +1,8 @@
 "use client"
 import Link from 'next/link';
-import localFont from "next/font/local";
 import { useSession, signOut } from "next-auth/react";
 import { User, LogOut, LayoutDashboard, Moon, Sun, Link as LinkIcon } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
-
-const poppins = localFont({
-  src: "../fonts/Poppins-ExtraBold.ttf",
-  variable: "--font-Poppins",
-  weight: "800",
-});
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -22,7 +15,7 @@ const Navbar = () => {
           <div className="bg-brand-primary p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
             <LinkIcon className="w-5 h-5 text-white" />
           </div>
-          <div className={`text-2xl font-black text-gradient ${poppins.className}`}>
+          <div className="text-2xl font-black text-gradient font-poppins">
             Bitlinks
           </div>
         </Link>

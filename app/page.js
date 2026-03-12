@@ -1,17 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import localfont from "next/font/local";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Zap, BarChart3, Shield, ArrowRight, MousePointer2, Smartphone, Globe } from "lucide-react";
 import FeatureCard from "./components/FeatureCard";
-
-const poppins = localfont({
-  src: "./fonts/Poppins-ExtraBold.ttf",
-  variable: "--font-Poppins",
-  weight: "800",
-});
 
 export default function Home() {
   const containerVariants = {
@@ -61,7 +54,7 @@ export default function Home() {
 
           <motion.h1
             variants={itemVariants}
-            className={`text-5xl md:text-7xl font-black leading-[1.1] mb-6 ${poppins.className}`}
+            className={`text-5xl md:text-7xl font-black leading-[1.1] mb-6 font-poppins`}
           >
             Shorten. Share. <br />
             <span className="text-gradient">Track Everything.</span>
@@ -117,7 +110,7 @@ export default function Home() {
       <section className="relative px-6 md:px-16 py-32 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <h2 className={`text-4xl md:text-5xl font-black mb-6 ${poppins.className}`}>
+            <h2 className={`text-4xl md:text-5xl font-black mb-6 font-poppins`}>
               Powerful Features for <span className="text-gradient">Power Users</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -179,7 +172,7 @@ export default function Home() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/20 rounded-full -mr-32 -mt-32 blur-[100px] animate-pulse"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-500/20 rounded-full -ml-32 -mb-32 blur-[100px] animate-pulse" style={{ animationDelay: "2s" }}></div>
           <div className="relative z-10">
-            <h2 className={`text-4xl md:text-5xl font-black mb-8 ${poppins.className}`}>
+            <h2 className={`text-4xl md:text-5xl font-black mb-8 font-poppins`}>
               Ready to take control of <br /> <span className="text-gradient hover:opacity-80 transition-opacity">your links?</span>
             </h2>
             <Link href="/register">
