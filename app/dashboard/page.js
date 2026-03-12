@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Trash2, ExternalLink, QrCode, Copy, Check, Plus, Edit3, Loader2, MousePointer2, Link as LinkIcon, BarChart } from "lucide-react"
+import { Trash2, ExternalLink, QrCode, Copy, Check, Plus, Edit3, Loader2, MousePointer2, Link as LinkIcon, BarChart, Zap, Lock, Calendar } from "lucide-react"
 import toast from "react-hot-toast"
 import QRCode from 'qrcode'
 import AnalyticsChart from "../components/AnalyticsChart"
