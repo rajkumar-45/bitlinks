@@ -1,11 +1,11 @@
 "use client"
 import Link from 'next/link';
-import localfont from "next/font/local";
+import localFont from "next/font/local";
 import { useSession, signOut } from "next-auth/react";
 import { User, LogOut, LayoutDashboard, Moon, Sun, Link as LinkIcon } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 
-const poppins = localfont({
+const poppins = localFont({
   src: "../fonts/Poppins-ExtraBold.ttf",
   variable: "--font-Poppins",
   weight: "800",

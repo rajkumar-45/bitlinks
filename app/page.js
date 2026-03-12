@@ -5,6 +5,7 @@ import localfont from "next/font/local";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Zap, BarChart3, Shield, ArrowRight, MousePointer2, Smartphone, Globe } from "lucide-react";
+import FeatureCard from "./components/FeatureCard";
 
 const poppins = localfont({
   src: "./fonts/Poppins-ExtraBold.ttf",
@@ -38,9 +39,9 @@ export default function Home() {
   return (
     <main className="relative overflow-x-hidden">
       {/* Background Blobs */}
-      <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
-      <div className="absolute top-0 -right-4 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{ animationDelay: "2s" }}></div>
-      <div className="absolute -bottom-8 left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{ animationDelay: "4s" }}></div>
+      <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+      <div className="absolute top-0 -right-4 w-72 h-72 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" style={{ animationDelay: "2s" }}></div>
+      <div className="absolute -bottom-8 left-20 w-72 h-72 bg-brand-accent rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" style={{ animationDelay: "4s" }}></div>
 
       {/* ================= HERO SECTION ================= */}
       <section className="relative pt-32 pb-20 px-6 md:px-16 max-w-7xl mx-auto flex flex-col items-center text-center">
@@ -77,13 +78,16 @@ export default function Home() {
 
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/shorten">
-              <button className="btn-primary flex items-center gap-2 justify-center w-full sm:w-auto text-lg py-4 px-8">
-                Start Shortening Free
-                <ArrowRight className="w-5 h-5" />
+              <button className="relative overflow-hidden group flex items-center justify-center gap-2 w-full sm:w-auto text-lg py-4 px-8 rounded-2xl bg-brand-primary text-white hover:bg-brand-primary/90 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_-10px_rgba(124,58,237,0.5)]">
+                <span className="relative z-10 flex items-center gap-2">
+                  Start Shortening Free
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <div className="absolute inset-0 h-full w-full group-hover:animate-shimmer text-transparent" />
               </button>
             </Link>
             <Link href="/dashboard">
-              <button className="btn-secondary flex items-center gap-2 justify-center w-full sm:w-auto text-lg py-4 px-8">
+              <button className="flex items-center justify-center gap-2 w-full sm:w-auto text-lg py-4 px-8 rounded-2xl border-2 border-border bg-background/50 backdrop-blur hover:bg-muted text-foreground transition-all duration-300 hover:scale-105">
                 View Dashboard
               </button>
             </Link>
@@ -95,28 +99,17 @@ export default function Home() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-20 relative w-full aspect-video md:aspect-[21/9] max-w-5xl glass rounded-3xl overflow-hidden shadow-2xl group"
+          className="mt-20 relative w-full max-w-5xl glass rounded-3xl overflow-hidden shadow-2xl group hover:shadow-[0_0_50px_-12px_rgba(124,58,237,0.5)] transition-all duration-500"
         >
           <Image
-            src="/vector3.avif"
+            src="/new bg pic.png"
             alt="Bitlinks Dashboard Preview"
-            fill
-            className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
+            width={1920}
+            height={1080}
+            className="w-full h-auto object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 block"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-40"></div>
-          {/* Dashboard UI Overlay Placeholder */}
-          <div className="absolute inset-0 flex items-center justify-center">
-             <div className="glass-card p-6 rounded-2xl w-4/5 md:w-1/2 flex flex-col gap-4 animate-pulse-slow">
-                <div className="h-4 w-1/3 bg-brand-primary/20 rounded-full"></div>
-                <div className="h-8 w-2/3 bg-foreground/10 rounded-full"></div>
-                <div className="grid grid-cols-3 gap-4 mt-2">
-                  <div className="h-20 bg-foreground/5 rounded-xl"></div>
-                  <div className="h-20 bg-foreground/5 rounded-xl"></div>
-                  <div className="h-20 bg-foreground/5 rounded-xl"></div>
-                </div>
-             </div>
-          </div>
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-background to-transparent opacity-90 pointer-events-none z-10"></div>
         </motion.div>
       </section>
 
@@ -183,14 +176,16 @@ export default function Home() {
       {/* ================= CTA SECTION ================= */}
       <section className="px-6 py-32">
         <div className="max-w-5xl mx-auto glass rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/20 rounded-full -mr-32 -mt-32 blur-[100px] animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-500/20 rounded-full -ml-32 -mb-32 blur-[100px] animate-pulse" style={{ animationDelay: "2s" }}></div>
           <div className="relative z-10">
             <h2 className={`text-4xl md:text-5xl font-black mb-8 ${poppins.className}`}>
-              Ready to take control of <br /> <span className="text-gradient">your links?</span>
+              Ready to take control of <br /> <span className="text-gradient hover:opacity-80 transition-opacity">your links?</span>
             </h2>
             <Link href="/register">
-              <button className="btn-primary text-xl py-5 px-12 rounded-2xl">
-                Get Started for Free
+              <button className="relative overflow-hidden group text-xl py-5 px-12 rounded-2xl bg-brand-primary text-white hover:bg-brand-primary/90 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_-10px_rgba(124,58,237,0.6)]">
+                <span className="relative z-10">Get Started for Free</span>
+                <div className="absolute inset-0 h-full w-full group-hover:animate-shimmer text-transparent" />
               </button>
             </Link>
           </div>

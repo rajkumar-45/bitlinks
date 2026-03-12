@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Trash2, ExternalLink, QrCode, Copy, Check, Plus, Edit3, Loader2, MousePointer2, Link as LinkIcon, BarChart } from "lucide-react"
 import toast from "react-hot-toast"
+import QRCode from 'qrcode'
 import AnalyticsChart from "../components/AnalyticsChart"
 
 export default function Dashboard() {
@@ -315,7 +316,6 @@ function LinkItem({ link, onCopy, onEdit, onDelete, onToggle, copiedId }) {
                     <button 
                         onClick={() => {
                             const fullUrl = `${window.location.protocol}//${window.location.host}/${link.shorturl}`
-                            const QRCode = require('qrcode')
                             QRCode.toDataURL(fullUrl).then(qr => {
                                 toast((t) => (
                                     <div className="flex flex-col items-center gap-4">

@@ -2,12 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    * {
-        @apply border-gray-200;
-    }
+@layer utilities {
+  .glass {
+    @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:bg-black/10 dark:border-white/10;
+  }
+  .glass-card {
+    @apply bg-white/40 backdrop-blur-lg border border-white/30 shadow-[0_8px_32px_0_rgba(31,38,135,0.1)] dark:bg-black/40 dark:border-white/20;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-accent;
+  }
+  .animate-shimmer {
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+}
 
-    body {
-        @apply bg-white text-black;
-    }
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-foreground bg-background;
 }

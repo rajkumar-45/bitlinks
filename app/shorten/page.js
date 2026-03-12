@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import localfont from "next/font/local";
 import { Link as LinkIcon, Sparkles, Copy, Check, ArrowRight, Shield, Calendar, Lock, Zap, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import QRCode from 'qrcode';
+import { motion } from "framer-motion";
 
 const poppins = localfont({
     src: "../fonts/Poppins-ExtraBold.ttf",
@@ -58,7 +60,6 @@ const Shorten = () => {
                 toast.success("Link generated!", { id: loadingToast })
                 
                 // Generate QR Code
-                const QRCode = require('qrcode')
                 const qr = await QRCode.toDataURL(fullUrl)
                 setQrCode(qr)
 
