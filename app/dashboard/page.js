@@ -276,7 +276,7 @@ function LinkItem({ link, onCopy, onEdit, onDelete, onToggle, copiedId }) {
                     </p>
                     <button 
                         onClick={onCopy}
-                        className="p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors"
+                        className="p-1.5 hover:bg-black/5 rounded-lg transition-colors"
                         title="Copy link"
                     >
                         {copiedId === link.shorturl ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
@@ -285,7 +285,7 @@ function LinkItem({ link, onCopy, onEdit, onDelete, onToggle, copiedId }) {
                         href={`/${link.shorturl}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors group/link"
+                        className="p-1.5 hover:bg-black/5 rounded-lg transition-colors group/link"
                     >
                         <ExternalLink className="w-4 h-4 text-muted-foreground group-hover/link:text-brand-primary" />
                     </a>

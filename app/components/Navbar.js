@@ -1,12 +1,10 @@
 "use client"
 import Link from 'next/link';
 import { useSession, signOut } from "next-auth/react";
-import { User, LogOut, LayoutDashboard, Moon, Sun, Link as LinkIcon } from "lucide-react";
-import { useTheme } from "./ThemeProvider";
+import { User, LogOut, LayoutDashboard, Link as LinkIcon } from "lucide-react";
 
 const Navbar = () => {
   const { data: session } = useSession();
-  const { theme, toggleTheme } = useTheme();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
@@ -33,17 +31,10 @@ const Navbar = () => {
         </div>
 
         <div className="flex gap-4 items-center">
-          <button 
-            onClick={toggleTheme}
-            className="p-2 rounded-xl text-muted-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-            title="Toggle theme"
-          >
-            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
 
           {session ? (
             <div className="flex gap-3 items-center ml-2 border-l border-border pl-4">
-              <Link href="/dashboard" className="p-2 rounded-xl text-muted-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Dashboard">
+              <Link href="/dashboard" className="p-2 rounded-xl text-muted-foreground hover:bg-black/5 transition-colors" title="Dashboard">
                 <LayoutDashboard className="w-5 h-5" />
               </Link>
               <div className="hidden md:flex items-center gap-2 bg-secondary px-3 py-1.5 rounded-xl">

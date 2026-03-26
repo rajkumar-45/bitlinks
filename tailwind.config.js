@@ -14,9 +14,9 @@ export default {
       colors: {
         border: "hsl(var(--border))",
         brand: {
-          primary: "#7c3aed",
-          secondary: "#ec4899",
-          accent: "#06b6d4",
+          primary: "#6366F1",
+          secondary: "#8B5CF6",
+          accent: "#38BDF8",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

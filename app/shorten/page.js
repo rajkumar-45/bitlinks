@@ -116,7 +116,7 @@ const Shorten = () => {
                             <input 
                                 type="text"
                                 value={url}
-                                className='w-full px-6 py-4 rounded-2xl bg-white/50 dark:bg-slate-900/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all font-medium'
+                                className='w-full px-6 py-4 rounded-2xl bg-white/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all font-medium'
                                 placeholder='https://example.com/very-long-url-path'
                                 onChange={e => seturl(e.target.value)} 
                             />
@@ -133,7 +133,7 @@ const Shorten = () => {
                                 <input 
                                     type="text"
                                     value={shorturl}
-                                    className='w-full pl-32 pr-6 py-4 rounded-2xl bg-white/50 dark:bg-slate-900/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all font-medium'
+                                    className='w-full pl-32 pr-6 py-4 rounded-2xl bg-white/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all font-medium'
                                     placeholder='my-link'
                                     onChange={e => setshorturl(e.target.value)} 
                                 />
@@ -150,7 +150,7 @@ const Shorten = () => {
                                 <input 
                                     type="date"
                                     value={expiresAt}
-                                    className='w-full px-5 py-3 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all text-sm'
+                                    className='w-full px-5 py-3 rounded-xl bg-white/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all text-sm'
                                     onChange={e => setExpiresAt(e.target.value)} 
                                 />
                             </div>
@@ -162,7 +162,7 @@ const Shorten = () => {
                                 <input 
                                     type="password"
                                     value={password}
-                                    className='w-full px-5 py-3 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all text-sm'
+                                    className='w-full px-5 py-3 rounded-xl bg-white/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all text-sm'
                                     placeholder="••••••••"
                                     onChange={e => setPassword(e.target.value)} 
                                 />

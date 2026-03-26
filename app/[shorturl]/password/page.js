@@ -61,8 +61,8 @@ export default function PasswordPage() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-6 py-4 rounded-2xl bg-white/50 dark:bg-slate-900/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all font-medium"
-                            placeholder="••••••••"
+                            className="w-full px-6 py-4 rounded-2xl bg-white/50 border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all font-medium"
+                            placeholder="**********"
                             autoFocus
                         />
                     </div>
