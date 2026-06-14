@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Mail, Loader2, ArrowLeft, Key } from "lucide-react"
 import toast from "react-hot-toast"
@@ -7,12 +8,11 @@ import toast from "react-hot-toast"
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState("")
     const [loading, setLoading] = useState(false)
-    const [resetLink, setResetLink] = useState("")
+    const router = useRouter()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
-        setResetLink("")
 
         try {
             const res = await fetch("/api/auth/forgot-password", {
@@ -23,11 +23,19 @@ export default function ForgotPasswordPage() {
 
             const data = await res.json()
 
-            if (res.ok) {
-                toast.success("Reset link generated!")
-                if (data.resetLink) {
-                    setResetLink(data.resetLink)
+            if (res.ok && data.success) {
+                toast.success("OTP sent successfully!")
+                
+                // Construct redirection query parameters
+                const params = new URLSearchParams({ email })
+                if (data.demoOtp) {
+                    params.set("demoOtp", data.demoOtp)
                 }
+                if (data.previewUrl) {
+                    params.set("previewUrl", data.previewUrl)
+                }
+
+                router.push(`/reset-password?${params.toString()}`)
             } else {
                 toast.error(data.message || "Email address not found")
             }
@@ -49,7 +57,7 @@ export default function ForgotPasswordPage() {
                     Reset Password
                 </h1>
                 <p className="text-gray-600 text-sm text-center mb-6">
-                    Enter your email address to recover your account.
+                    Enter your email address to receive a 6-digit OTP password reset code.
                 </p>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -70,21 +78,9 @@ export default function ForgotPasswordPage() {
                         disabled={loading}
                         className="bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all active:scale-95 disabled:opacity-70 mt-2 flex items-center justify-center"
                     >
-                        {loading ? <Loader2 className="animate-spin" /> : "Send Reset Link"}
+                        {loading ? <Loader2 className="animate-spin" /> : "Send OTP Code"}
                     </button>
                 </form>
-
-                {resetLink && (
-                    <div className="mt-6 p-4 bg-purple-50 border border-purple-100 rounded-xl">
-                        <p className="text-xs font-bold text-purple-800 uppercase tracking-wider mb-2">Demo Mode (Reset Link):</p>
-                        <a 
-                            href={resetLink} 
-                            className="text-sm text-purple-600 font-semibold underline break-all hover:text-purple-800 transition-colors"
-                        >
-                            {resetLink}
-                        </a>
-                    </div>
-                )}
 
                 <div className="text-center mt-6">
                     <Link href="/login" className="inline-flex items-center gap-1 text-purple-600 font-bold hover:underline text-sm">

@@ -1,5 +1,5 @@
 import clientPromise from "@/lib/mongodb"
-import crypto from "crypto"
+import { sendResetOtpEmail } from "@/lib/mail"
 
 export async function POST(request) {
     try {
@@ -18,30 +18,31 @@ export async function POST(request) {
             return Response.json({ success: false, message: "Email address not found" }, { status: 404 })
         }
 
-        const token = crypto.randomBytes(32).toString("hex")
-        const expiry = new Date(Date.now() + 3600000) // 1 hour expiry
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString()
+        const expiry = new Date(Date.now() + 15 * 60 * 1000) // 15 minutes expiry
 
         await collection.updateOne(
             { _id: user._id },
             { 
                 $set: { 
-                    resetToken: token,
-                    resetTokenExpiry: expiry
+                    resetOtp: otp,
+                    resetOtpExpiry: expiry
                 }
             }
         )
 
-        // Generate the reset link
-        const host = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000"
-        const resetLink = `${host}/reset-password?token=${token}`
+        // Try to send the email
+        const mailResult = await sendResetOtpEmail(email, otp)
 
         return Response.json({
             success: true,
-            message: "Reset link generated!",
-            resetLink
+            message: "OTP sent to your email!",
+            demoOtp: otp, // For ease of local testing
+            previewUrl: mailResult.previewUrl
         })
     } catch (error) {
-        console.error("Forgot password error:", error)
+        console.error("Forgot password API error:", error)
         return Response.json({ success: false, message: "Internal server error" }, { status: 500 })
     }
 }
