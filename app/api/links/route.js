@@ -11,7 +11,7 @@ export async function GET(request) {
         }
 
         const client = await clientPromise
-        const db = client.db("bitlinks")
+        const db = client.db("blinkurl")
         const collection = db.collection("url")
         const clicksCollection = db.collection("clicks")
 
@@ -99,7 +99,7 @@ export async function PATCH(request) {
         }
 
         const client = await clientPromise
-        const db = client.db("bitlinks")
+        const db = client.db("blinkurl")
         const collection = db.collection("url")
 
         const updateData = {}
@@ -111,6 +111,19 @@ export async function PATCH(request) {
             updateData.url = formattedUrl
         }
         
+        if (body.newShorturl !== undefined) {
+            const newShorturl = body.newShorturl.trim();
+            if (!/^[a-zA-Z0-9-]+$/.test(newShorturl)) {
+                return Response.json({ success: false, message: "Invalid short URL format" }, { status: 400 })
+            }
+            // Check for conflict
+            const existing = await collection.findOne({ shorturl: newShorturl });
+            if (existing && existing._id.toString() !== id) {
+                return Response.json({ success: false, message: "URL alias already exists!" }, { status: 400 });
+            }
+            updateData.shorturl = newShorturl;
+        }
+
         if (isActive !== undefined) {
             updateData.isActive = isActive
         }
@@ -150,7 +163,7 @@ export async function DELETE(request) {
         }
 
         const client = await clientPromise
-        const db = client.db("bitlinks")
+        const db = client.db("blinkurl")
         const collection = db.collection("url")
 
         const result = await collection.deleteOne({ 

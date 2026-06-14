@@ -5,14 +5,41 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
     const body = await request.json() 
     const client = await clientPromise;
-    const db = client.db("bitlinks")
+    const db = client.db("blinkurl")
     const collection = db.collection("url")
 
     // Ensure URL has protocol
-    let { url, shorturl, expiresAt, password } = body;
+    let { url, shorturl, expiresAt, password, urls } = body;
+
+    if (urls && Array.isArray(urls)) {
+        // Bulk generation
+        const newLinks = [];
+        for (let u of urls) {
+            let uShortText = Math.random().toString(36).substr(2, 6);
+            if (!u.startsWith('http://') && !u.startsWith('https://')) {
+                u = 'https://' + u;
+            }
+            newLinks.push({
+                url: u,
+                shorturl: uShortText,
+                userId: session?.user?.id || null,
+                clicks: 0,
+                createdAt: new Date(),
+                expiresAt: expiresAt ? new Date(expiresAt) : null,
+                password: password || null,
+                isActive: true
+            });
+        }
+        await collection.insertMany(newLinks);
+        return Response.json({ success: true, error: false, message: 'Bulk URLs Generated Successfully', links: newLinks });
+    }
+
+    if (!shorturl) {
+        shorturl = Math.random().toString(36).substr(2, 6);
+    }
 
     // Validation
-    if (!url || !shorturl) {
+    if (!url) {
         return Response.json({ success: false, message: "Missing required fields" }, { status: 400 })
     }
 

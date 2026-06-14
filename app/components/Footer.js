@@ -16,7 +16,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 {/* Brand Column */}
                 <div className="flex flex-col gap-4">
-                    <h2 className={`text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 ${poppins.className}`}>Bitlinks</h2>
+                    <h2 className={`text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 ${poppins.className}`}>BlinkURL</h2>
                     <p className="text-gray-400 text-sm leading-relaxed">
                         The most straightforward and professional URL shortener for your business and personal needs. Secure, fast, and reliable.
                     </p>
@@ -48,7 +48,7 @@ const Footer = () => {
 
             {/* Bottom Bar */}
             <div className="border-t border-white/10 pt-6 text-center text-gray-500 text-sm">
-                <p>&copy; {new Date().getFullYear()} Bitlinks. All rights reserved.</p>
+                <p>&copy; {new Date().getFullYear()} BlinkURL. All rights reserved.</p>
             </div>
         </footer>
     );

@@ -11,7 +11,7 @@ export async function POST(request) {
         }
 
         const client = await clientPromise;
-        const db = client.db("bitlinks");
+        const db = client.db("blinkurl");
         const collection = db.collection("url");
 
         const doc = await collection.findOne({ shorturl });

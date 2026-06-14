@@ -3,7 +3,7 @@ import clientPromise from "@/lib/mongodb";
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db("bitlinks");
+    const db = client.db("blinkurl");
 
     await db.collection("test").insertOne({
       name: "Rajkumar",

@@ -32,13 +32,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ## Advanced Features
 
 ### 🌐 Custom Domain Support
-To use a custom domain with Bitlinks (e.g., `link.yourbrand.com`):
-1. **DNS Setup**: Point a CNAME record from your subdomain to the Bitlinks production URL (e.g., `bitlinks.vercel.app`).
+To use a custom domain with BlinkURL (e.g., `link.yourbrand.com`):
+1. **DNS Setup**: Point a CNAME record from your subdomain to the BlinkURL production URL (e.g., `blinkurl.vercel.app`).
 2. **Server Configuration**: In a production environment, you would use a middleware or a reverse proxy to detect the incoming hostname and map it to the corresponding user account in the database.
 3. **Database Mapping**: Add a `customDomain` field to the user profile and check for it during the redirection logic to serve links specifically for that domain.
 
 ### 🛡️ Spam Protection
-Bitlinks includes a built-in domain blacklist to prevent the creation of links pointing to known malicious or phishing sites. This list can be dynamically updated in `app/api/generate/route.js`.
+BlinkURL includes a built-in domain blacklist to prevent the creation of links pointing to known malicious or phishing sites. This list can be dynamically updated in `app/api/generate/route.js`.
 
 ### 📊 Real-time Analytics
 Every link click captures detailed visitor data, including:

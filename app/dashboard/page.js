@@ -3,10 +3,12 @@ import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Trash2, ExternalLink, QrCode, Copy, Check, Plus, Edit3, Loader2, MousePointer2, Link as LinkIcon, BarChart, Zap, Lock, Calendar } from "lucide-react"
+import { Trash2, ExternalLink, QrCode, Copy, Check, Plus, Edit3, Loader2, MousePointer2, Link as LinkIcon, BarChart, Zap, Lock, Calendar, User } from "lucide-react"
 import toast from "react-hot-toast"
 import QRCode from 'qrcode'
-import AnalyticsChart from "../components/AnalyticsChart"
+import dynamic from 'next/dynamic'
+
+const AnalyticsChart = dynamic(() => import("../components/AnalyticsChart"), { ssr: false })
 
 export default function Dashboard() {
     const { data: session, status } = useSession()
@@ -89,6 +91,29 @@ export default function Dashboard() {
         }
     }
 
+    const editAlias = async (id, currentAlias) => {
+        const newShorturl = prompt("Enter new custom short alias (letters, numbers, hyphens only):", currentAlias);
+        if (!newShorturl || newShorturl === currentAlias) return;
+
+        const loadingToast = toast.loading("Updating alias...");
+        try {
+            const res = await fetch("/api/links", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id, newShorturl })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setLinks(links.map(link => link._id === id ? { ...link, shorturl: newShorturl } : link));
+                toast.success("Alias updated successfully", { id: loadingToast });
+            } else {
+                toast.error(data.message, { id: loadingToast });
+            }
+        } catch (error) {
+            toast.error("Failed to update alias", { id: loadingToast });
+        }
+    }
+
     const toggleStatus = async (id, currentStatus) => {
         const loadingToast = toast.loading(`${currentStatus ? "Deactivating" : "Activating"} link...`)
         try {
@@ -126,12 +151,20 @@ export default function Dashboard() {
                     <h1 className="text-4xl font-black mb-2">Dashboard</h1>
                     <p className="text-muted-foreground">Manage and track your shortened links.</p>
                 </div>
-                <Link href="/shorten">
-                    <button className="btn-primary flex items-center gap-2">
-                        <Plus className="w-5 h-5" />
-                        Create New Link
-                    </button>
-                </Link>
+                <div className="flex items-center gap-3">
+                    <Link href="/dashboard/bio">
+                        <button className="flex items-center gap-2 px-4 py-2 border rounded-xl hover:bg-slate-50 transition-colors bg-white font-medium text-brand-primary">
+                            <User className="w-5 h-5" />
+                            Smart Bio
+                        </button>
+                    </Link>
+                    <Link href="/shorten">
+                        <button className="btn-primary flex items-center gap-2">
+                            <Plus className="w-5 h-5" />
+                            Create New Link
+                        </button>
+                    </Link>
+                </div>
             </div>
 
             {/* Stats Overview */}
@@ -177,15 +210,16 @@ export default function Dashboard() {
                         </div>
                     ) : (
                         links.map((link) => (
-                            <LinkItem 
-                                key={link._id} 
-                                link={link} 
-                                onCopy={() => copyToClipboard(link.shorturl)}
-                                onEdit={() => editLink(link._id, link.url)}
-                                onDelete={() => deleteLink(link._id)}
-                                onToggle={() => toggleStatus(link._id, link.isActive !== false)}
-                                copiedId={copiedId}
-                            />
+                                <LinkItem 
+                                    key={link._id} 
+                                    link={link} 
+                                    onCopy={() => copyToClipboard(link.shorturl)}
+                                    onEdit={() => editLink(link._id, link.url)}
+                                    onEditAlias={() => editAlias(link._id, link.shorturl)}
+                                    onDelete={() => deleteLink(link._id)}
+                                    onToggle={() => toggleStatus(link._id, link.isActive !== false)}
+                                    copiedId={copiedId}
+                                />
                         ))
                     )}
                 </div>
@@ -252,7 +286,7 @@ function StatCard({ icon, label, value, subValue }) {
     )
 }
 
-function LinkItem({ link, onCopy, onEdit, onDelete, onToggle, copiedId }) {
+function LinkItem({ link, onCopy, onEdit, onEditAlias, onDelete, onToggle, copiedId }) {
     const isExpired = link.expiresAt && new Date(link.expiresAt) < new Date();
     const isActive = link.isActive !== false;
 
@@ -260,9 +294,18 @@ function LinkItem({ link, onCopy, onEdit, onDelete, onToggle, copiedId }) {
         <div className={`glass-card p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group transition-all ${!isActive || isExpired ? 'opacity-60 saturate-50' : ''}`}>
             <div className="flex-1 min-w-0 w-full">
                 <div className="flex items-center gap-3 mb-2">
-                    <span className="text-brand-primary font-black text-xl hover:underline cursor-pointer">
-                        /{link.shorturl}
-                    </span>
+                    <div className="flex items-center gap-2 group/alias">
+                        <span className="text-brand-primary font-black text-xl hover:underline cursor-pointer">
+                            /{link.shorturl}
+                        </span>
+                        <button 
+                            onClick={onEditAlias}
+                            className="p-1 opacity-0 group-hover/alias:opacity-100 hover:bg-brand-primary/10 text-brand-primary/70 hover:text-brand-primary rounded-md transition-all"
+                            title="Edit Alias"
+                        >
+                            <Edit3 className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
                     <div className="flex items-center gap-1">
                         {link.password && <Lock className="w-3.5 h-3.5 text-orange-500" title="Password protected" />}
                         {link.expiresAt && <Calendar className="w-3.5 h-3.5 text-blue-500" title={`Expires: ${new Date(link.expiresAt).toLocaleDateString()}`} />}

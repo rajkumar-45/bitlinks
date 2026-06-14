@@ -129,7 +129,7 @@ const Shorten = () => {
                                 Custom Alias
                             </label>
                             <div className="relative">
-                                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground opacity-50 font-medium">bitlinks.com/</span>
+                                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground opacity-50 font-medium">blinkurl.app/</span>
                                 <input 
                                     type="text"
                                     value={shorturl}
@@ -223,7 +223,7 @@ const Shorten = () => {
                                             <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                                         </a>
                                         <a 
-                                            href={`mailto:?subject=${encodeURIComponent("Link Shared via Bitlinks")}&body=${encodeURIComponent("Check out this link: " + generated)}`}
+                                            href={`mailto:?subject=${encodeURIComponent("Link Shared via BlinkURL")}&body=${encodeURIComponent("Check out this link: " + generated)}`}
                                             className="bg-blue-500 text-white p-3 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-blue-500/20"
                                             title="Share via Email"
                                         >
@@ -274,7 +274,7 @@ const Shorten = () => {
                 </div>
                 
                 <p className="text-center mt-10 text-sm text-muted-foreground">
-                    By using Bitlinks, you agree to our <Link href="/terms" className="underline underline-offset-4 font-semibold hover:text-foreground">Terms</Link> and <Link href="/privacy" className="underline underline-offset-4 font-semibold hover:text-foreground">Privacy Policy</Link>.
+                    By using BlinkURL, you agree to our <Link href="/terms" className="underline underline-offset-4 font-semibold hover:text-foreground">Terms</Link> and <Link href="/privacy" className="underline underline-offset-4 font-semibold hover:text-foreground">Privacy Policy</Link>.
                 </p>
             </div>
         </div>

@@ -76,7 +76,7 @@ export default function PasswordPage() {
                     </button>
                 </form>
 
-                <p className="mt-10 text-center text-xs text-muted-foreground uppercase tracking-widest font-bold">Securely powered by Bitlinks</p>
+                <p className="mt-10 text-center text-xs text-muted-foreground uppercase tracking-widest font-bold">Securely powered by BlinkURL</p>
             </div>
         </div>
     );
